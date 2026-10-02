@@ -51,4 +51,4 @@ COMMENT ON TABLE characters IS 'Residents of the Hello Kitty universe';
 COMMENT ON TABLE items      IS 'Belongings owned by characters';
 
 COMMIT;
-) ENGINE=InnoDB;
+
