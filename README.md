@@ -1,21 +1,50 @@
-# HelloKitty
-Project Title:
-Hello Kitty Universe Database
+# Hello Kitty Universe Database
 
-Purpose:
-This database organizes and tracks data about the Hello Kitty universe, including characters, merchandise, events, and fan interactions. It is designed for use by enthusiasts, businesses, or researchers interested in managing Hello Kitty-related data.
+**Purpose:** A small example PostgreSQL database modeling the Hello Kitty
+universe. It tracks families, characters, and the items they own — a
+minimal, extensible schema suitable for learning, demos, or as a starting
+point for a larger project.
 
+## Contents
 
-## PostgreSQL schema
+- `hello_kitty_universe_postgres.sql` — PostgreSQL schema
+  (creates `families`, `characters`, `items`).
+- `docker-compose.yml` — Postgres 15 service with healthcheck.
+- `.env.example` — template for required environment variables.
+- `erd/hello_kitty_erd.md` — entity-relationship diagram and notes.
 
-A PostgreSQL-compatible schema file is provided at [hello-kitty-universe-database/hello_kitty_universe_postgres.sql](hello-kitty-universe-database/hello_kitty_universe_postgres.sql).
+## Quick start (Docker)
 
-To create and load the database locally:
+    cp .env.example .env
+    docker compose up -d
+    docker compose ps
+    docker compose exec db psql -U hk_user -d hello_kitty_universe -c '\dt'
 
-```bash
-createdb hello_kitty_universe
-psql -d hello_kitty_universe -f hello-kitty-universe-database/hello_kitty_universe_postgres.sql
-```
+You should see three tables: `families`, `characters`, `items`.
 
-This file complements the MySQL schema at [hello-kitty-universe-database/hello_kitty_universe.sql](hello-kitty-universe-database/hello_kitty_universe.sql).
+## Manual (non-Docker) usage
 
+Requires PostgreSQL 15+ installed locally.
+
+    createdb hello_kitty_universe
+    psql -d hello_kitty_universe -f hello_kitty_universe_postgres.sql
+
+## Schema overview
+
+- **families** — groupings (e.g. the Kitty family). `name` is unique.
+- **characters** — residents. Optional FK to `families`
+  (`ON DELETE SET NULL`).
+- **items** — belongings owned by a character
+  (`ON DELETE CASCADE`).
+
+See `erd/hello_kitty_erd.md` for the full ERD.
+
+## Notes
+
+- The `.env` file is git-ignored; commit `.env.example` instead.
+- The init script only runs on a fresh data volume. To reload:
+
+      docker compose down -v
+      docker compose up -d
+
+  (This deletes all data.)
