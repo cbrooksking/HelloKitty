@@ -16,3 +16,6 @@ services:
 
 volumes:
   pgdata:
+POSTGRES_USER=kitty
+POSTGRES_PASSWORD=changeme
+POSTGRES_DB=hello_kitty_universe
