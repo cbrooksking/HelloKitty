@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:15
@@ -13,9 +11,11 @@ services:
     volumes:
       - ./hello_kitty_universe_postgres.sql:/docker-entrypoint-initdb.d/hello_kitty_universe_postgres.sql:ro
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   pgdata:
-POSTGRES_USER=kitty
-POSTGRES_PASSWORD=changeme
-POSTGRES_DB=hello_kitty_universe
