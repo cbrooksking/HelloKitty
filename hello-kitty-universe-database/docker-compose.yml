@@ -1,4 +1,3 @@
-yaml
 services:
   db:
     image: postgres:15
@@ -10,7 +9,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./hello_kitty_universe_postgres.sql:/docker-entrypoint-initdb.d/hello_kitty_universe_postgres.sql:ro
+      - ./hello_kitty_universe_postgres.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./seed_sanrio.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
       - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
